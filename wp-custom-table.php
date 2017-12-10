@@ -9,17 +9,12 @@ Author: Postnidea
 include(plugin_dir_path( __FILE__ )."/helper/ssp.class.php");
 function register_custom_menu_page() {
     add_menu_page('Wp Custom Table', 'Wp Custom Table', 'manage_options', 'custompage', '_custom_menu_page', null, 6); 
-	add_submenu_page( 'custompage', 'List', 'List', 'manage_options', 'subpage_test', 'subpage_test' ); 
 }
 
 add_action('admin_menu', 'register_custom_menu_page');
 
-function subpage_test(){
- echo do_shortcode('[wp-custom-table table="test"]');  
-}
-
 function _custom_menu_page(){
-   echo do_shortcode('[wpc id=110]');  
+   echo do_shortcode('[wpc id=5]');  
 }
 
 function wpc_data($atts) {
@@ -96,34 +91,9 @@ add_action("wp_ajax_get_wp_custom_table", "get_wp_custom_table"); //for public u
 //add_action("wp_ajax_nopriv_get_template_data", "get_template_data"); // for restrict usage
 function get_wp_custom_table() {
 
-/*	echo "<pre>";
-	print_r($_REQUEST);
-	echo "</pre>";*/
-    //$table = 'markers';
     $table = $_REQUEST['table_name'];
 	$post_id = $_REQUEST['post_id'];
     $raw_columns = get_post_meta($post_id, 'wpc_columns_name', true ); 
-	/*print_r($columns);
-    die;*/
-    // Table's primary key
-	//$primaryKey = 'id';
-		
-	/*$columns = array(
-		array( 'db' => 'id', 'dt' => 0 ,'formatter'=>function($id, $row){ return "<input type='checkbox' name='delete_id[]' value='".$id."'>";}),
-		array( 'db' => 'name', 'dt' => 1 ),
-		array( 'db' => 'address','dt' => 2 ),
-		array( 'db' => 'lat','dt' => 3 ),
-		array( 'db' => 'lng','dt' => 4 ),
-		array('db'=> 'id','dt'=> 5,'formatter' => function( $id, $row ) {
-				return '<a href="edit.php?id='.$id.'">Edit</a>';
-				//return $id;
-			}),
-		array('db'=> 'id','dt'=> 6,'formatter' => function( $id, $row ) {
-				return '<a href="edit.php?id='.$id.'">View</a>';
-				//return $id;
-			})
-
-		);*/
 
         $columns  =array();
         $i=0;
@@ -133,11 +103,7 @@ function get_wp_custom_table() {
             $i++;
         }
 
-//print_r( $raw_columns);
-    //print_r($columns);
-
-	// SQL server connection information
-global $wpdb;
+    global $wpdb;
 	$sql_details = array(
 		'user' => $wpdb->dbuser,
 		'pass' => $wpdb->dbpassword,
@@ -195,38 +161,15 @@ $all_objects = $wpdb->get_col( $cols_sql );
         <?php } ?>
         </select>
         </td>
-
-    <td width="30%">Choose primary key</td>
-<td>
-    <select>
-        <option value="">Select</option>
-        <option>Test 2</option>
-        <option>Test 3</option>
-    </select>
-</td>
-
         </tr>
         <tr>
             <td>Select Column </td>
-            <td colspan="2">
+            <td>
                 <div id="columns_data">
                 
                 </div>
             </td>
-            <td> </td>
-        </tr>
-        <tr id="more_option">
-            <td colspan="2">
-                <input type="checkbox" name="">
-                Are you want more info popup
-            </td>
-            <td colspan="2">
-                <input type="checkbox" name="">
-                Are you want delete button
-            </td>
-        </tr>
-        <tr>
-           <td colspan="4">this is the test info</td>     
+            
         </tr>
 </table>
 <?php
